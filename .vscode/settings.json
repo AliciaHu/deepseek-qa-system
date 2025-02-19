@@ -1,0 +1,13 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "python.languageServer": "Pylance",
+    "python.linting.enabled": true,
+    "debugpy.adapter": "testAdapter",
+    "jupyter.debugJustMyCode": false,
+    "python.envFile": "${workspaceFolder}/.env",
+    "terminal.integrated.env.osx": {
+        "PYTORCH_ENABLE_MPS_FALLBACK": "1"
+    },
+    "python.analysis.extraPaths": ["src"],
+    "python.autoComplete.extraPaths": ["src"]
+}

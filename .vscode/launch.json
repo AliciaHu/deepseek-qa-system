@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: 问答主程序",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "args": ["--model", "deepseek-7b-4bit"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "TOKENIZERS_PARALLELISM": "true"
+            }
+        },
+        {
+            "name": "Jupyter: 模型单元测试",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "jupyter",
+            "args": [
+                "notebook",
+                "--ip=localhost",
+                "--port=8888"
+            ]
+        }
+    ]
+}

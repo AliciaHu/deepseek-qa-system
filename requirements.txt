@@ -1,0 +1,12 @@
+# 基础依赖
+torch>=2.2.0
+transformers>=4.35.0
+accelerate>=0.25.0
+sentencepiece>=0.1.99
+huggingface-hub>=0.19.0
+python-dotenv>=1.0.0
+
+# 开发依赖
+pytest>=7.4.0
+ipykernel>=6.25.0
+jupyter>=1.0.0
