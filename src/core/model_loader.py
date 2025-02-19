@@ -7,6 +7,7 @@ from huggingface_hub import login
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+import logging
 
 load_dotenv()
 
@@ -52,16 +53,30 @@ class ModelLoader:
         if hf_token:
             login(token=hf_token)
 
-        # 量化配置
-        self.model = AutoModelForCausalLM.from_pretrained(
-            self.model_name,
-            torch_dtype=torch.float16,
-            device_map="auto",
-            trust_remote_code=True,
-            offload_folder="./offload"  # 指定权重卸载的文件夹
-        )
-        
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        # 量化配置及加载模型
+        try:
+            self.model = AutoModelForCausalLM.from_pretrained(
+                self.model_name,
+                torch_dtype=torch.float16,
+                device_map="auto",
+                trust_remote_code=True,
+                offload_folder="./offload"  # 指定权重卸载的文件夹
+            )
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        except Exception as e:
+            logging.info(f"加载主模型 '{self.model_name}' 失败: {e}. 尝试备用模型 'deepseek-ai/deepseek-llm-1b-chat'.")
+            backup_model = os.getenv("MODEL_NAME", "deepseek-ai/deepseek-llm-7b-chat")
+            self.model = AutoModelForCausalLM.from_pretrained(
+                backup_model,
+                torch_dtype=torch.float16,
+                device_map="auto",
+                trust_remote_code=True,
+                offload_folder="./offload"
+            )
+            self.tokenizer = AutoTokenizer.from_pretrained(backup_model)
+            # 更新模型名称为备用模型
+            self.model_name = backup_model
+
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
     def get_model(self):
